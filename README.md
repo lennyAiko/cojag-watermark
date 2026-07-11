@@ -1,22 +1,34 @@
-# Rsbuild project
+# Watermark Bench
 
-## Setup
+Stamp a logo across a batch of photos, preview it live, and export everything as a ZIP — entirely in your browser. No uploads, no server, no tracking. All image processing happens client-side on an HTML canvas.
 
-Install the dependencies:
+Built with React 19, Rsbuild, and Tailwind CSS v4. Installable as a Progressive Web App and works offline.
+
+## Features
+
+- **Batch watermarking** — drop in a mix of portrait and landscape photos at once.
+- **Live canvas preview** — every setting applies instantly to the active image.
+- **Flexible placement** — 9-point position grid or a repeating tiled pattern.
+- **Fine controls** — logo size (% of width), edge padding, opacity, and rotation.
+- **One-click export** — renders each photo to PNG and packs them into a ZIP with a dependency-free writer.
+- **100% local** — images never leave the device.
+- **Installable & offline** — PWA with a service worker that caches the app shell.
+
+## Getting started
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-## Get started
-
-Start the dev server, and the app will be available at [http://localhost:3000](http://localhost:3000).
+Start the dev server (available at http://localhost:3000):
 
 ```bash
 npm run dev
 ```
 
-Build the app for production:
+Build for production:
 
 ```bash
 npm run build
@@ -28,9 +40,56 @@ Preview the production build locally:
 npm run preview
 ```
 
-## Learn more
+> The service worker is only active in a production build (`npm run build` + `npm run preview`), not in dev.
 
-To learn more about Rsbuild, check out the following resources:
+## Usage
 
-- [Rsbuild documentation](https://rsbuild.rs) - explore Rsbuild features and APIs.
-- [Rsbuild GitHub repository](https://github.com/web-infra-dev/rsbuild) - your feedback and contributions are welcome!
+1. **Add a logo** in the left rail (PNG with transparency works best).
+2. **Add images** by dropping them onto the preview or the "Add images" zone.
+3. **Adjust** layout, size, padding, opacity, and rotation — the preview updates live.
+4. **Download all** to export a ZIP of watermarked PNGs.
+
+## Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview the production build |
+| `npm run lint` | Lint with ESLint |
+| `npm run format` | Format with Prettier |
+
+## Project structure
+
+```
+src/
+  App.jsx                      # Renders <WatermarkStudio/>
+  App.css                      # Tailwind v4 theme tokens + global styles
+  registerServiceWorker.js     # PWA service worker registration
+  lib/
+    zip.js                     # Dependency-free ZIP writer (STORE)
+    watermark.js               # Positions, image loading, canvas compositing
+  hooks/
+    useWatermarkStudio.js      # State + upload/remove/download logic
+  components/
+    WatermarkStudio.jsx        # Top-level composition
+    layout/Header.jsx
+    ui/                        # Label, Button, Slider, Dropzone
+    controls/                  # ControlRail, LogoPanel, PositionPicker
+    preview/                   # PreviewStage, BatchBar, ThumbnailStrip, NavButton
+public/
+  manifest.webmanifest         # PWA manifest
+  sw.js                        # Service worker (app-shell cache)
+  favicon.png                  # App icon
+```
+
+## Tech stack
+
+- [React 19](https://react.dev) with the React Compiler
+- [Rsbuild](https://rsbuild.rs) (Rspack-based bundler)
+- [Tailwind CSS v4](https://tailwindcss.com)
+- [lucide-react](https://lucide.dev) icons
+
+## License
+
+[MIT](./LICENSE) © 2026 Lennox Charles

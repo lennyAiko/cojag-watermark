@@ -2,6 +2,9 @@
   "name": "watermark-tool",
   "version": "1.0.0",
   "private": true,
+  "description": "Batch-watermark photos with a logo and export them as a ZIP — entirely in your browser.",
+  "license": "MIT",
+  "author": "Lennox Charles",
   "type": "module",
   "scripts": {
     "build": "rsbuild build",
