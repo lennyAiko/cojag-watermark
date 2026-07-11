@@ -12,7 +12,7 @@ export default defineConfig({
     pluginTailwindcss(),
   ],
   html: {
-    title: 'Watermark Bench',
+    title: 'COJAG watermark tool',
     favicon: './public/favicon.png',
     meta: {
       description:

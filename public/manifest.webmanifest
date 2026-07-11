@@ -1,6 +1,6 @@
 {
-  "name": "Watermark Bench",
-  "short_name": "Watermark",
+  "name": "COJAG Watermark tool",
+  "short_name": "COJAGW",
   "description": "Batch-watermark photos with a logo and export them as a ZIP — entirely in your browser.",
   "start_url": "/",
   "scope": "/",
