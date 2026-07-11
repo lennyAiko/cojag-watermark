@@ -17,7 +17,7 @@ export function ControlRail({ settings, actions, logo, hasLogo }) {
   } = actions;
 
   return (
-    <div className="flex w-[300px] shrink-0 flex-col gap-6 overflow-y-auto border-r border-border p-6">
+    <div className="flex w-full shrink-0 flex-col gap-6 border-b border-border p-6 md:w-[300px] md:overflow-y-auto md:border-b-0 md:border-r">
       <LogoPanel logo={logo} onUpload={onLogoUpload} onClear={onLogoClear} />
 
       <section>
@@ -77,7 +77,7 @@ export function ControlRail({ settings, actions, logo, hasLogo }) {
       </section>
 
       {!hasLogo && (
-        <p className="mt-auto rounded-md border border-border-2 bg-surface-2/60 p-3 text-[11px] leading-relaxed text-text-muted">
+        <p className="rounded-md border border-border-2 bg-surface-2/60 p-3 text-[11px] leading-relaxed text-text-muted md:mt-auto">
           Add a logo above to start stamping. Settings apply live to every image
           in the batch.
         </p>

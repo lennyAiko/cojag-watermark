@@ -8,10 +8,10 @@ export function WatermarkStudio() {
   const studio = useWatermarkStudio();
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-bg text-text">
+    <div className="flex min-h-screen flex-col overflow-y-auto bg-bg text-text md:h-screen md:overflow-hidden">
       <Header />
 
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row">
         <ControlRail
           settings={studio.settings}
           actions={studio.actions}

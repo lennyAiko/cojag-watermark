@@ -22,7 +22,7 @@ export function PreviewStage({
   }, [active, logo, settings]);
 
   return (
-    <div className="relative flex min-h-0 min-w-0 flex-1 items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_30%,#1b1e25_0%,#0f1115_70%)] p-6">
+    <div className="relative flex min-h-[50vh] min-w-0 flex-1 items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_30%,#1b1e25_0%,#0f1115_70%)] p-4 md:min-h-0 md:p-6">
       {images.length === 0 ? (
         <div className="w-full max-w-md">
           <Dropzone
