@@ -4,7 +4,7 @@ export function PositionPicker({ value, onChange, disabled }) {
   return (
     <div
       className={[
-        'grid aspect-[4/3] w-full grid-cols-3 grid-rows-3 gap-1 rounded-lg border border-border-2 bg-surface-2 p-2.5',
+        'grid aspect-[4/3] w-full max-w-[160px] grid-cols-3 grid-rows-3 gap-1 rounded-lg border border-border-2 bg-surface-2 p-2',
         disabled ? 'pointer-events-none opacity-40' : '',
       ].join(' ')}
     >
