@@ -13,7 +13,7 @@ const variants = {
 export function Button({ variant = 'secondary', className = '', ...props }) {
   return (
     <button
-      className={`${base} ${variants[variant]} ${className}`}
+      className={`${base} ${variants[variant]} ${className} cursor-pointer`}
       {...props}
     />
   );

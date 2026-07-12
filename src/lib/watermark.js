@@ -6,6 +6,7 @@ import {
   tintAlpha,
   vignetteStrength,
 } from './presets';
+import { applyAdjustments } from './adjustments';
 
 export const POSITIONS = [
   { id: 'top-left', label: 'Top left', row: 0, col: 0 },
@@ -134,15 +135,28 @@ export function renderComposite(canvas, baseImg, logoImg, opts) {
     tiled = false,
     presetId = 'none',
     intensity = 100,
+    adjustments = null,
+    maxPreviewSize = 0,
   } = opts;
-  canvas.width = baseImg.naturalWidth;
-  canvas.height = baseImg.naturalHeight;
+
+  // Optionally downscale for a responsive preview; export passes full size.
+  const nw = baseImg.naturalWidth;
+  const nh = baseImg.naturalHeight;
+  let scale = 1;
+  if (maxPreviewSize > 0) {
+    const longest = Math.max(nw, nh);
+    if (longest > maxPreviewSize) scale = maxPreviewSize / longest;
+  }
+  canvas.width = Math.max(1, Math.round(nw * scale));
+  canvas.height = Math.max(1, Math.round(nh * scale));
+
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(baseImg, 0, 0);
+  ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
 
   // Grade the photo before stamping the logo so the logo stays ungraded.
   applyPreset(ctx, canvas, presetId, intensity);
+  applyAdjustments(ctx, canvas, adjustments);
 
   if (!logoImg) return;
 

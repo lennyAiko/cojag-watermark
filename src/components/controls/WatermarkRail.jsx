@@ -1,20 +1,9 @@
 import { Label, ValuePill } from '../ui/Label';
 import { Slider } from '../ui/Slider';
-import { Button } from '../ui/Button';
 import { PositionPicker } from './PositionPicker';
-import { PresetPicker } from './PresetPicker';
 import { LogoPanel } from './LogoPanel';
 
-export function ControlRail({
-  settings,
-  actions,
-  logo,
-  hasLogo,
-  activePreset,
-  activeIntensity,
-  hasImages,
-  imageCount,
-}) {
+export function WatermarkRail({ settings, actions, logo, hasLogo }) {
   const { position, sizePct, paddingPct, opacity, rotation, tiled } = settings;
   const {
     onLogoUpload,
@@ -25,13 +14,12 @@ export function ControlRail({
     setOpacity,
     setRotation,
     setTiled,
-    setActivePreset,
-    setActiveIntensity,
-    applyPresetToAll,
   } = actions;
 
   return (
-    <div className="flex w-full shrink-0 flex-col gap-6 border-b border-border p-6 md:w-[300px] md:overflow-y-auto md:border-b-0 md:border-r">
+    <div className="flex w-full shrink-0 flex-col gap-6 border-b border-border p-6 md:w-[280px] md:overflow-y-auto md:border-b-0 md:border-r lg:w-[300px]">
+      <SectionTitle>Watermark</SectionTitle>
+
       <LogoPanel logo={logo} onUpload={onLogoUpload} onClear={onLogoClear} />
 
       <section>
@@ -90,42 +78,6 @@ export function ControlRail({
         <Slider min={-45} max={45} value={rotation} onChange={setRotation} />
       </section>
 
-      <section>
-        <Label>07 · Preset</Label>
-        {hasImages ? (
-          <>
-            <PresetPicker value={activePreset} onChange={setActivePreset} />
-            <div className="mt-4">
-              <Label>
-                Intensity <ValuePill>{activeIntensity}%</ValuePill>
-              </Label>
-              <Slider
-                min={0}
-                max={100}
-                value={activeIntensity}
-                onChange={setActiveIntensity}
-              />
-            </div>
-            <Button
-              variant="secondary"
-              className="mt-3 w-full"
-              onClick={applyPresetToAll}
-              disabled={imageCount < 2}
-            >
-              Apply preset to all ({imageCount})
-            </Button>
-            <p className="mt-2 text-[11px] leading-relaxed text-text-faint">
-              Presets apply per image. Use “Apply to all” to copy this look and
-              intensity across the batch.
-            </p>
-          </>
-        ) : (
-          <p className="rounded-md border border-border-2 bg-surface-2/60 p-3 text-[11px] leading-relaxed text-text-muted">
-            Add images to apply Lightroom-style color presets.
-          </p>
-        )}
-      </section>
-
       {!hasLogo && (
         <p className="rounded-md border border-border-2 bg-surface-2/60 p-3 text-[11px] leading-relaxed text-text-muted md:mt-auto">
           Add a logo above to start stamping. Settings apply live to every image
@@ -133,6 +85,14 @@ export function ControlRail({
         </p>
       )}
     </div>
+  );
+}
+
+function SectionTitle({ children }) {
+  return (
+    <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent">
+      {children}
+    </h2>
   );
 }
 

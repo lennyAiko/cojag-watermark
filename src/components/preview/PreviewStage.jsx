@@ -9,6 +9,7 @@ export function PreviewStage({
   active,
   logo,
   settings,
+  maxPreviewSize,
   onAddImages,
   onPrev,
   onNext,
@@ -22,8 +23,10 @@ export function PreviewStage({
       ...settings,
       presetId: active.presetId,
       intensity: active.intensity,
+      adjustments: active.adjustments,
+      maxPreviewSize,
     });
-  }, [active, logo, settings]);
+  }, [active, logo, settings, maxPreviewSize]);
 
   return (
     <div className="relative flex min-h-[50vh] min-w-0 flex-1 items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_30%,#1b1e25_0%,#0f1115_70%)] p-4 md:min-h-0 md:p-6">

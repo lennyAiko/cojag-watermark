@@ -5,7 +5,10 @@ import {
   renderComposite,
   canvasToPngBytes,
 } from '../lib/watermark';
+import { DEFAULT_ADJUSTMENTS } from '../lib/adjustments';
 import { makeZip } from '../lib/zip';
+
+const MAX_PREVIEW_SIZE = 1600;
 
 export function useWatermarkStudio() {
   const [logo, setLogo] = useState(null); // { url, img, name }
@@ -60,6 +63,7 @@ export function useWatermarkStudio() {
             img.naturalHeight >= img.naturalWidth ? 'portrait' : 'landscape',
           presetId: 'none',
           intensity: 100,
+          adjustments: { ...DEFAULT_ADJUSTMENTS },
         };
       }),
     );
@@ -96,13 +100,38 @@ export function useWatermarkStudio() {
     );
   }, []);
 
+  const setActiveAdjustment = useCallback((key, value) => {
+    const idx = activeIndexRef.current;
+    setImages((prev) =>
+      prev.map((im, i) =>
+        i === idx
+          ? { ...im, adjustments: { ...im.adjustments, [key]: value } }
+          : im,
+      ),
+    );
+  }, []);
+
+  const resetAdjustments = useCallback(() => {
+    const idx = activeIndexRef.current;
+    setImages((prev) =>
+      prev.map((im, i) =>
+        i === idx ? { ...im, adjustments: { ...DEFAULT_ADJUSTMENTS } } : im,
+      ),
+    );
+  }, []);
+
   const applyPresetToAll = useCallback(() => {
     const idx = activeIndexRef.current;
     setImages((prev) => {
       const source = prev[idx];
       if (!source) return prev;
-      const { presetId, intensity } = source;
-      return prev.map((im) => ({ ...im, presetId, intensity }));
+      const { presetId, intensity, adjustments } = source;
+      return prev.map((im) => ({
+        ...im,
+        presetId,
+        intensity,
+        adjustments: { ...adjustments },
+      }));
     });
   }, []);
 
@@ -128,6 +157,7 @@ export function useWatermarkStudio() {
         ...settings,
         presetId: im.presetId,
         intensity: im.intensity,
+        adjustments: im.adjustments,
       });
       const data = await canvasToPngBytes(offscreen);
       const baseName = im.name.replace(/\.[^/.]+$/, '');
@@ -182,6 +212,8 @@ export function useWatermarkStudio() {
       setTiled,
       setActivePreset,
       setActiveIntensity,
+      setActiveAdjustment,
+      resetAdjustments,
       applyPresetToAll,
     },
     setActiveIndex,
@@ -190,5 +222,6 @@ export function useWatermarkStudio() {
     prev,
     next,
     downloadAll,
+    maxPreviewSize: MAX_PREVIEW_SIZE,
   };
 }
