@@ -10,6 +10,7 @@ Built with React 19, Rsbuild, and Tailwind CSS v4. Installable as a Progressive 
 - **Live canvas preview** — every setting applies instantly to the active image.
 - **Flexible placement** — 9-point position grid or a repeating tiled pattern.
 - **Fine controls** — logo size (% of width), edge padding, opacity, and rotation.
+- **Color presets** — Lightroom-style looks (Vivid, Matte, B&W, Noir, Vintage, Teal & Orange, Golden, Arctic, and more) with a per-image intensity slider, plus one-click "Apply to all".
 - **One-click export** — renders each photo to PNG and packs them into a ZIP with a dependency-free writer.
 - **100% local** — images never leave the device.
 - **Installable & offline** — PWA with a service worker that caches the app shell.
@@ -47,7 +48,8 @@ npm run preview
 1. **Add a logo** in the left rail (PNG with transparency works best).
 2. **Add images** by dropping them onto the preview or the "Add images" zone.
 3. **Adjust** layout, size, padding, opacity, and rotation — the preview updates live.
-4. **Download all** to export a ZIP of watermarked PNGs.
+4. **Pick a preset** and set its intensity — this applies to the active image only. Use **Apply preset to all** to copy the look and intensity across the batch.
+5. **Download all** to export a ZIP of watermarked PNGs (each image keeps its own preset; the logo is never color-graded).
 
 ## Scripts
 
@@ -69,13 +71,14 @@ src/
   lib/
     zip.js                     # Dependency-free ZIP writer (STORE)
     watermark.js               # Positions, image loading, canvas compositing
+    presets.js                 # Lightroom-style color presets + filter builder
   hooks/
     useWatermarkStudio.js      # State + upload/remove/download logic
   components/
     WatermarkStudio.jsx        # Top-level composition
     layout/Header.jsx
     ui/                        # Label, Button, Slider, Dropzone
-    controls/                  # ControlRail, LogoPanel, PositionPicker
+    controls/                  # ControlRail, LogoPanel, PositionPicker, PresetPicker
     preview/                   # PreviewStage, BatchBar, ThumbnailStrip, NavButton
 public/
   manifest.webmanifest         # PWA manifest

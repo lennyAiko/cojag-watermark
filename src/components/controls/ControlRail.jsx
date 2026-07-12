@@ -1,9 +1,20 @@
 import { Label, ValuePill } from '../ui/Label';
 import { Slider } from '../ui/Slider';
+import { Button } from '../ui/Button';
 import { PositionPicker } from './PositionPicker';
+import { PresetPicker } from './PresetPicker';
 import { LogoPanel } from './LogoPanel';
 
-export function ControlRail({ settings, actions, logo, hasLogo }) {
+export function ControlRail({
+  settings,
+  actions,
+  logo,
+  hasLogo,
+  activePreset,
+  activeIntensity,
+  hasImages,
+  imageCount,
+}) {
   const { position, sizePct, paddingPct, opacity, rotation, tiled } = settings;
   const {
     onLogoUpload,
@@ -14,6 +25,9 @@ export function ControlRail({ settings, actions, logo, hasLogo }) {
     setOpacity,
     setRotation,
     setTiled,
+    setActivePreset,
+    setActiveIntensity,
+    applyPresetToAll,
   } = actions;
 
   return (
@@ -74,6 +88,42 @@ export function ControlRail({ settings, actions, logo, hasLogo }) {
           06 · Rotation <ValuePill>{rotation}°</ValuePill>
         </Label>
         <Slider min={-45} max={45} value={rotation} onChange={setRotation} />
+      </section>
+
+      <section>
+        <Label>07 · Preset</Label>
+        {hasImages ? (
+          <>
+            <PresetPicker value={activePreset} onChange={setActivePreset} />
+            <div className="mt-4">
+              <Label>
+                Intensity <ValuePill>{activeIntensity}%</ValuePill>
+              </Label>
+              <Slider
+                min={0}
+                max={100}
+                value={activeIntensity}
+                onChange={setActiveIntensity}
+              />
+            </div>
+            <Button
+              variant="secondary"
+              className="mt-3 w-full"
+              onClick={applyPresetToAll}
+              disabled={imageCount < 2}
+            >
+              Apply preset to all ({imageCount})
+            </Button>
+            <p className="mt-2 text-[11px] leading-relaxed text-text-faint">
+              Presets apply per image. Use “Apply to all” to copy this look and
+              intensity across the batch.
+            </p>
+          </>
+        ) : (
+          <p className="rounded-md border border-border-2 bg-surface-2/60 p-3 text-[11px] leading-relaxed text-text-muted">
+            Add images to apply Lightroom-style color presets.
+          </p>
+        )}
       </section>
 
       {!hasLogo && (

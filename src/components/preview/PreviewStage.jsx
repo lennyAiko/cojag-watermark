@@ -18,7 +18,11 @@ export function PreviewStage({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !active) return;
-    renderComposite(canvas, active.img, logo?.img || null, settings);
+    renderComposite(canvas, active.img, logo?.img || null, {
+      ...settings,
+      presetId: active.presetId,
+      intensity: active.intensity,
+    });
   }, [active, logo, settings]);
 
   return (

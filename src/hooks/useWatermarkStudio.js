@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   POSITIONS,
   loadImage,
@@ -19,6 +19,7 @@ export function useWatermarkStudio() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isZipping, setIsZipping] = useState(false);
   const [zipProgress, setZipProgress] = useState(0);
+  const activeIndexRef = useRef(0);
 
   const settings = useMemo(
     () => ({ position, sizePct, paddingPct, opacity, rotation, tiled }),
@@ -57,6 +58,8 @@ export function useWatermarkStudio() {
           img,
           orientation:
             img.naturalHeight >= img.naturalWidth ? 'portrait' : 'landscape',
+          presetId: 'none',
+          intensity: 100,
         };
       }),
     );
@@ -79,6 +82,30 @@ export function useWatermarkStudio() {
     setActiveIndex(0);
   }, []);
 
+  const setActivePreset = useCallback((presetId) => {
+    const idx = activeIndexRef.current;
+    setImages((prev) =>
+      prev.map((im, i) => (i === idx ? { ...im, presetId } : im)),
+    );
+  }, []);
+
+  const setActiveIntensity = useCallback((intensity) => {
+    const idx = activeIndexRef.current;
+    setImages((prev) =>
+      prev.map((im, i) => (i === idx ? { ...im, intensity } : im)),
+    );
+  }, []);
+
+  const applyPresetToAll = useCallback(() => {
+    const idx = activeIndexRef.current;
+    setImages((prev) => {
+      const source = prev[idx];
+      if (!source) return prev;
+      const { presetId, intensity } = source;
+      return prev.map((im) => ({ ...im, presetId, intensity }));
+    });
+  }, []);
+
   const prev = useCallback(
     () => setActiveIndex((i) => (i - 1 + images.length) % images.length),
     [images.length],
@@ -97,7 +124,11 @@ export function useWatermarkStudio() {
 
     for (let i = 0; i < images.length; i++) {
       const im = images[i];
-      renderComposite(offscreen, im.img, logo?.img || null, settings);
+      renderComposite(offscreen, im.img, logo?.img || null, {
+        ...settings,
+        presetId: im.presetId,
+        intensity: im.intensity,
+      });
       const data = await canvasToPngBytes(offscreen);
       const baseName = im.name.replace(/\.[^/.]+$/, '');
       entries.push({ name: `${baseName}-watermarked.png`, data });
@@ -126,6 +157,10 @@ export function useWatermarkStudio() {
   const safeIndex = activeIndex < images.length ? activeIndex : 0;
   const active = images[safeIndex] ?? null;
 
+  useEffect(() => {
+    activeIndexRef.current = safeIndex;
+  }, [safeIndex]);
+
   return {
     logo,
     images,
@@ -145,6 +180,9 @@ export function useWatermarkStudio() {
       setOpacity,
       setRotation,
       setTiled,
+      setActivePreset,
+      setActiveIntensity,
+      applyPresetToAll,
     },
     setActiveIndex,
     removeImage,

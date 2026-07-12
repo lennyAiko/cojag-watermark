@@ -1,5 +1,12 @@
 // Watermark rendering helpers — pure canvas logic, no React.
 
+import {
+  getPreset,
+  buildFilterString,
+  tintAlpha,
+  vignetteStrength,
+} from './presets';
+
 export const POSITIONS = [
   { id: 'top-left', label: 'Top left', row: 0, col: 0 },
   { id: 'top-center', label: 'Top center', row: 0, col: 1 },
@@ -78,6 +85,45 @@ function drawTiled(ctx, canvas, logoImg, sizePct, opacity, rotation) {
   ctx.restore();
 }
 
+function applyPreset(ctx, canvas, presetId, intensity) {
+  const preset = getPreset(presetId);
+  if (!preset || preset.id === 'none' || intensity <= 0) return;
+
+  // Re-draw the current pixels through the filter to grade in place.
+  const filter = buildFilterString(preset, intensity);
+  if (filter !== 'none') {
+    ctx.save();
+    ctx.filter = filter;
+    ctx.drawImage(canvas, 0, 0);
+    ctx.restore();
+  }
+
+  const tAlpha = tintAlpha(preset, intensity);
+  if (tAlpha > 0) {
+    const [r, g, b] = preset.tint.color;
+    ctx.save();
+    ctx.globalCompositeOperation = 'overlay';
+    ctx.globalAlpha = tAlpha;
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  }
+
+  const vig = vignetteStrength(preset, intensity);
+  if (vig > 0) {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const outer = Math.hypot(cx, cy);
+    const grad = ctx.createRadialGradient(cx, cy, outer * 0.5, cx, cy, outer);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(1, `rgba(0,0,0,${vig.toFixed(3)})`);
+    ctx.save();
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  }
+}
+
 export function renderComposite(canvas, baseImg, logoImg, opts) {
   const {
     sizePct,
@@ -86,12 +132,17 @@ export function renderComposite(canvas, baseImg, logoImg, opts) {
     opacity,
     rotation = 0,
     tiled = false,
+    presetId = 'none',
+    intensity = 100,
   } = opts;
   canvas.width = baseImg.naturalWidth;
   canvas.height = baseImg.naturalHeight;
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(baseImg, 0, 0);
+
+  // Grade the photo before stamping the logo so the logo stays ungraded.
+  applyPreset(ctx, canvas, presetId, intensity);
 
   if (!logoImg) return;
 

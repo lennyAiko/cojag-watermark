@@ -17,6 +17,10 @@ export function WatermarkStudio() {
           actions={studio.actions}
           logo={studio.logo}
           hasLogo={!!studio.logo}
+          hasImages={studio.images.length > 0}
+          imageCount={studio.images.length}
+          activePreset={studio.active?.presetId ?? 'none'}
+          activeIntensity={studio.active?.intensity ?? 100}
         />
 
         <div className="flex min-w-0 flex-1 flex-col">
