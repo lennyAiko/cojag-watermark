@@ -96,6 +96,63 @@ export const PRESETS = [
     filter: { saturate: 1.05, brightness: 1.02, hueRotate: 8 },
     tint: { color: [80, 140, 220], alpha: 0.12 },
   },
+  {
+    id: 'moody',
+    label: 'Moody',
+    swatch: 'linear-gradient(135deg,#334155,#0f172a)',
+    filter: { contrast: 1.3, brightness: 0.9, saturate: 0.85 },
+    tint: { color: [20, 30, 45], alpha: 0.18 },
+    vignette: 0.5,
+  },
+  {
+    id: 'airy',
+    label: 'Airy',
+    swatch: 'linear-gradient(135deg,#fce7f3,#e0e7ff)',
+    filter: { contrast: 0.8, brightness: 1.15, saturate: 0.75 },
+    tint: { color: [255, 250, 240], alpha: 0.1 },
+  },
+  {
+    id: 'kodachrome',
+    label: 'Kodachrome',
+    swatch: 'linear-gradient(135deg,#dc2626,#7c2d12)',
+    filter: { saturate: 1.5, contrast: 1.2, sepia: 0.1 },
+    tint: { color: [200, 40, 30], alpha: 0.08 },
+  },
+  {
+    id: 'crossprocess',
+    label: 'Cross Process',
+    swatch: 'linear-gradient(135deg,#a3e635,#365314)',
+    filter: { saturate: 1.35, contrast: 1.3, hueRotate: 25, brightness: 1.02 },
+    tint: { color: [180, 200, 40], alpha: 0.1 },
+  },
+  {
+    id: 'bleachbypass',
+    label: 'Bleach Bypass',
+    swatch: 'linear-gradient(135deg,#cbd5e1,#1e293b)',
+    filter: { saturate: 0.4, contrast: 1.5, brightness: 1.05 },
+  },
+  {
+    id: 'dusk',
+    label: 'Dusk',
+    swatch: 'linear-gradient(135deg,#312e81,#1e1b4b)',
+    filter: { saturate: 0.95, contrast: 1.1, brightness: 0.88, hueRotate: -12 },
+    tint: { color: [30, 50, 100], alpha: 0.2 },
+    vignette: 0.3,
+  },
+  {
+    id: 'duotone',
+    label: 'Duotone',
+    swatch: 'linear-gradient(135deg,#3b82f6,#1e1b4b)',
+    filter: { grayscale: 1, contrast: 1.1 },
+    tint: { color: [30, 60, 200], alpha: 0.35 },
+  },
+  {
+    id: 'ansel',
+    label: 'Ansel',
+    swatch: 'linear-gradient(135deg,#f5f5f5,#171717)',
+    filter: { grayscale: 1, contrast: 1.6, brightness: 0.98 },
+    vignette: 0.65,
+  },
 ];
 
 const PRESET_MAP = new Map(PRESETS.map((p) => [p.id, p]));
