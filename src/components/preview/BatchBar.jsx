@@ -7,6 +7,8 @@ export function BatchBar({
   images,
   activeIndex,
   counts,
+  exportFormat,
+  exportQuality,
   isZipping,
   zipProgress,
   onAddImages,
@@ -14,6 +16,8 @@ export function BatchBar({
   onRemove,
   onClear,
   onDownload,
+  onExportFormatChange,
+  onExportQualityChange,
 }) {
   const empty = images.length === 0;
 
@@ -31,29 +35,72 @@ export function BatchBar({
             </span>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           {!empty && (
-            <Button variant="secondary" onClick={onClear}>
-              Clear all
-            </Button>
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="export-format"
+                className="text-xs text-text-muted"
+              >
+                Export
+              </label>
+              <select
+                id="export-format"
+                value={exportFormat}
+                onChange={(event) => onExportFormatChange(event.target.value)}
+                disabled={isZipping}
+                className="rounded-md border border-border-2 bg-surface-2 px-2 py-1.75 text-xs text-text outline-none focus:border-accent"
+              >
+                <option value="jpeg">JPEG · smaller</option>
+                <option value="webp">WebP · smallest</option>
+                <option value="png">PNG · lossless</option>
+              </select>
+              {exportFormat !== 'png' && (
+                <label
+                  htmlFor="export-quality"
+                  className="flex items-center gap-1.5 text-xs text-text-muted"
+                >
+                  <input
+                    id="export-quality"
+                    type="range"
+                    min="60"
+                    max="100"
+                    value={exportQuality}
+                    onChange={(event) =>
+                      onExportQualityChange(Number(event.target.value))
+                    }
+                    disabled={isZipping}
+                    className="w-20 cursor-pointer"
+                  />
+                  <span className="w-8">{exportQuality}%</span>
+                </label>
+              )}
+            </div>
           )}
-          <Button
-            variant="primary"
-            disabled={empty || isZipping}
-            onClick={onDownload}
-            className="flex-1 sm:flex-none"
-          >
-            {isZipping ? (
-              <>
-                <Loader2 size={13} className="animate-spin-slow" />
-                Zipping {zipProgress}%
-              </>
-            ) : (
-              <>
-                <Download size={13} /> Download all ({images.length})
-              </>
+          <div className="flex gap-2">
+            {!empty && (
+              <Button variant="secondary" onClick={onClear}>
+                Clear all
+              </Button>
             )}
-          </Button>
+            <Button
+              variant="primary"
+              disabled={empty || isZipping}
+              onClick={onDownload}
+              className="flex-1 sm:flex-none"
+            >
+              {isZipping ? (
+                <>
+                  <Loader2 size={13} className="animate-spin-slow" />
+                  Zipping {zipProgress}%
+                </>
+              ) : (
+                <>
+                  <Download size={13} /> Download all ({images.length})
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 

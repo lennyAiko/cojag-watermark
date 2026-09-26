@@ -3,7 +3,7 @@ import {
   POSITIONS,
   loadImage,
   renderComposite,
-  canvasToPngBytes,
+  canvasToImageBytes,
 } from '../lib/watermark';
 import { DEFAULT_ADJUSTMENTS } from '../lib/adjustments';
 import { makeZip } from '../lib/zip';
@@ -22,6 +22,8 @@ export function useWatermarkStudio() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isZipping, setIsZipping] = useState(false);
   const [zipProgress, setZipProgress] = useState(0);
+  const [exportFormat, setExportFormat] = useState('jpeg');
+  const [exportQuality, setExportQuality] = useState(90);
   const activeIndexRef = useRef(0);
 
   const settings = useMemo(
@@ -159,9 +161,13 @@ export function useWatermarkStudio() {
         intensity: im.intensity,
         adjustments: im.adjustments,
       });
-      const data = await canvasToPngBytes(offscreen);
+      const { data, extension } = await canvasToImageBytes(
+        offscreen,
+        exportFormat,
+        exportQuality,
+      );
       const baseName = im.name.replace(/\.[^/.]+$/, '');
-      entries.push({ name: `${baseName}-watermarked.png`, data });
+      entries.push({ name: `${baseName}-watermarked.${extension}`, data });
       setZipProgress(Math.round(((i + 1) / images.length) * 100));
       await new Promise((r) => setTimeout(r, 0)); // keep UI responsive
     }
@@ -176,7 +182,7 @@ export function useWatermarkStudio() {
     a.remove();
     URL.revokeObjectURL(url);
     setIsZipping(false);
-  }, [images, logo, settings]);
+  }, [images, logo, settings, exportFormat, exportQuality]);
 
   const counts = useMemo(() => {
     const portrait = images.filter((i) => i.orientation === 'portrait').length;
@@ -198,8 +204,12 @@ export function useWatermarkStudio() {
     activeIndex: safeIndex,
     counts,
     settings,
+    exportFormat,
+    exportQuality,
     isZipping,
     zipProgress,
+    setExportFormat,
+    setExportQuality,
     actions: {
       onLogoUpload,
       onLogoClear,

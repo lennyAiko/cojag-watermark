@@ -175,10 +175,40 @@ export function renderComposite(canvas, baseImg, logoImg, opts) {
   }
 }
 
-export function canvasToPngBytes(canvas) {
-  return new Promise((resolve) => {
-    canvas.toBlob(async (blob) => {
-      resolve(new Uint8Array(await blob.arrayBuffer()));
-    }, 'image/png');
+export function canvasToImageBytes(canvas, format = 'jpeg', quality = 90) {
+  const mimeTypes = {
+    jpeg: 'image/jpeg',
+    webp: 'image/webp',
+    png: 'image/png',
+  };
+  const mimeType = mimeTypes[format] || mimeTypes.jpeg;
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      async (blob) => {
+        if (!blob) {
+          reject(new Error('The browser could not encode this image.'));
+          return;
+        }
+
+        try {
+          const actualMimeType = blob.type || 'image/png';
+          const extension =
+            actualMimeType === 'image/jpeg'
+              ? 'jpg'
+              : actualMimeType === 'image/webp'
+                ? 'webp'
+                : 'png';
+          resolve({
+            data: new Uint8Array(await blob.arrayBuffer()),
+            extension,
+          });
+        } catch (error) {
+          reject(error);
+        }
+      },
+      mimeType,
+      quality / 100,
+    );
   });
 }

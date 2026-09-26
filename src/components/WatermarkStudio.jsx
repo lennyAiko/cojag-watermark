@@ -37,6 +37,8 @@ export function WatermarkStudio() {
             images={studio.images}
             activeIndex={studio.activeIndex}
             counts={studio.counts}
+            exportFormat={studio.exportFormat}
+            exportQuality={studio.exportQuality}
             isZipping={studio.isZipping}
             zipProgress={studio.zipProgress}
             onAddImages={studio.actions.onAddImages}
@@ -44,6 +46,8 @@ export function WatermarkStudio() {
             onRemove={studio.removeImage}
             onClear={studio.clearAll}
             onDownload={studio.downloadAll}
+            onExportFormatChange={studio.setExportFormat}
+            onExportQualityChange={studio.setExportQuality}
           />
         </div>
 
