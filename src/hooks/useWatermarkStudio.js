@@ -113,6 +113,25 @@ export function useWatermarkStudio() {
     );
   }, []);
 
+  const setActiveCrop = useCallback((crop) => {
+    const idx = activeIndexRef.current;
+    setImages((prev) =>
+      prev.map((im, i) => {
+        if (i !== idx) return im;
+        const cropWidth = crop?.width ?? 1;
+        const cropHeight = crop?.height ?? 1;
+        const aspectRatio =
+          (im.img.naturalWidth * cropWidth) /
+          (im.img.naturalHeight * cropHeight);
+        return {
+          ...im,
+          crop,
+          orientation: aspectRatio > 1 ? 'landscape' : 'portrait',
+        };
+      }),
+    );
+  }, []);
+
   const resetAdjustments = useCallback(() => {
     const idx = activeIndexRef.current;
     setImages((prev) =>
@@ -160,6 +179,7 @@ export function useWatermarkStudio() {
         presetId: im.presetId,
         intensity: im.intensity,
         adjustments: im.adjustments,
+        crop: im.crop,
       });
       const { data, extension } = await canvasToImageBytes(
         offscreen,
@@ -223,6 +243,7 @@ export function useWatermarkStudio() {
       setActivePreset,
       setActiveIntensity,
       setActiveAdjustment,
+      setActiveCrop,
       resetAdjustments,
       applyPresetToAll,
     },

@@ -9,6 +9,7 @@ Built with React 19, Rsbuild, and Tailwind CSS v4. Installable as a Progressive 
 - **Batch watermarking** — drop in a mix of portrait and landscape photos at once.
 - **Live canvas preview** — every setting applies instantly to the active image.
 - **Flexible placement** — 9-point position grid or a repeating tiled pattern.
+- **Per-image cropping** — drag to select a freeform crop, adjust or reset it, and export the cropped result.
 - **Fine controls** — logo size (% of width), edge padding, opacity, and rotation.
 - **Color presets** — Lightroom-style looks (Vivid, Matte, B&W, Noir, Vintage, Teal & Orange, Golden, Arctic, and more) with a per-image intensity slider, plus one-click "Apply look to all".
 - **Manual adjustments** — per-image temperature, tint, brightness, contrast, highlights, shadows, vibrance, and saturation, stacked on top of the chosen preset.
@@ -48,19 +49,20 @@ npm run preview
 
 1. **Add a logo** in the left rail (PNG with transparency works best).
 2. **Add images** by dropping them onto the preview or the "Add images" zone.
-3. **Adjust** layout, size, padding, opacity, and rotation — the preview updates live.
-4. **Pick a preset** and set its intensity, then fine-tune with manual adjustments (temperature, tint, brightness, contrast, highlights, shadows, vibrance, saturation) — all per image. Use **Apply look to all** to copy the full look across the batch.
-5. **Download all** to export a ZIP of watermarked PNGs (each image keeps its own look; the logo is never color-graded).
+3. **Crop** an image with the Crop button: drag a selection over the preview and apply it. Use Adjust crop or Reset to change or remove it.
+4. **Adjust** layout, size, padding, opacity, and rotation — the preview updates live.
+5. **Pick a preset** and set its intensity, then fine-tune with manual adjustments (temperature, tint, brightness, contrast, highlights, shadows, vibrance, saturation) — all per image. Use **Apply look to all** to copy the full look across the batch.
+6. **Download all** to export a ZIP of watermarked images (each image keeps its own crop and look; the logo is never color-graded).
 
 ## Scripts
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Build for production |
+| Command           | Description                  |
+| ----------------- | ---------------------------- |
+| `npm run dev`     | Start the dev server         |
+| `npm run build`   | Build for production         |
 | `npm run preview` | Preview the production build |
-| `npm run lint` | Lint with ESLint |
-| `npm run format` | Format with Prettier |
+| `npm run lint`    | Lint with ESLint             |
+| `npm run format`  | Format with Prettier         |
 
 ## Project structure
 

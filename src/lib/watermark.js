@@ -137,22 +137,27 @@ export function renderComposite(canvas, baseImg, logoImg, opts) {
     intensity = 100,
     adjustments = null,
     maxPreviewSize = 0,
+    crop = null,
   } = opts;
 
   // Optionally downscale for a responsive preview; export passes full size.
   const nw = baseImg.naturalWidth;
   const nh = baseImg.naturalHeight;
+  const sx = crop ? crop.x * nw : 0;
+  const sy = crop ? crop.y * nh : 0;
+  const sw = crop ? crop.width * nw : nw;
+  const sh = crop ? crop.height * nh : nh;
   let scale = 1;
   if (maxPreviewSize > 0) {
-    const longest = Math.max(nw, nh);
+    const longest = Math.max(sw, sh);
     if (longest > maxPreviewSize) scale = maxPreviewSize / longest;
   }
-  canvas.width = Math.max(1, Math.round(nw * scale));
-  canvas.height = Math.max(1, Math.round(nh * scale));
+  canvas.width = Math.max(1, Math.round(sw * scale));
+  canvas.height = Math.max(1, Math.round(sh * scale));
 
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(baseImg, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
 
   // Grade the photo before stamping the logo so the logo stays ungraded.
   applyPreset(ctx, canvas, presetId, intensity);

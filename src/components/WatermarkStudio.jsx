@@ -23,6 +23,7 @@ export function WatermarkStudio() {
 
         <div className="flex min-w-0 flex-1 flex-col">
           <PreviewStage
+            key={studio.active?.id ?? 'empty'}
             images={studio.images}
             activeIndex={studio.activeIndex}
             active={studio.active}
@@ -30,6 +31,7 @@ export function WatermarkStudio() {
             settings={studio.settings}
             maxPreviewSize={studio.maxPreviewSize}
             onAddImages={studio.actions.onAddImages}
+            onCropChange={studio.actions.setActiveCrop}
             onPrev={studio.prev}
             onNext={studio.next}
           />
